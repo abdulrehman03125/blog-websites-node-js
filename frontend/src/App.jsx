@@ -8,6 +8,7 @@ import SinglePost from './pages/SinglePost';
 import DashboardLayout from './components/dashboard/DashboardLayout';
 import Dashboard from "./components/dashboard/Dashboard";
 import CreatePost from './components/dashboard/CreatePost';
+import { ToastContainer } from 'react-toastify';
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
 
 
       </Routes>
+      <ToastContainer />
     </>
   )
 }

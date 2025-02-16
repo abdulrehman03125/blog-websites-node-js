@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 // create context
 export const CheckAuth = createContext(null);
@@ -6,13 +6,29 @@ export const CheckAuth = createContext(null);
 
 // create provider
 export const CheckAuthProvider = ({children}) => {
-    const [isLogin, setIsLogin] = useState(false);
-    const [token, setToken] = useState(null);
+        // save token 
+        const savedToken = sessionStorage.getItem("token");
+        const savedIsLogin = savedToken ? true : false;
 
-    const logout = () => {
-        setIsLogin(false);
-        setToken(null);
-    }
+
+
+        const [isLogin, setIsLogin] = useState(savedIsLogin);
+        const [token, setToken] = useState(savedToken);
+        const logout = () => {
+            setIsLogin(false);
+            setToken(null);
+            sessionStorage.removeItem("token"); // Remove the token from localStorage on logout
+        };
+
+        useEffect(() => {
+            if (isLogin && token) {
+                sessionStorage.setItem("token", token); // Save the token to localStorage
+            } else {
+                sessionStorage.removeItem("token"); // Remove token if not logged in
+                
+            }
+        }, [isLogin, token]);
+
     return(
         <CheckAuth.Provider value={ {isLogin, setIsLogin, token, setToken, logout} }>
             {children}

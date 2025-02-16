@@ -3,19 +3,27 @@ import { Form, Input, Button, Card } from "antd";
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import {CheckAuth}from '../context/CheckAuth';
+import { useLoadingBar } from "react-top-loading-bar";
 
 
 const Login = () => {
+
+    const { start, complete } = useLoadingBar({
+        color: "green",
+        height: 2,
+      })
     const [errors, setErrors] = useState(null);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    
 
     const AuthCtx = useContext(CheckAuth);
 
+    
     const onFinish = (values) => {
-        console.log("Login Success:", values);
+        // console.log("Login Success:", values);
 
-
+        start()
         axios.post("http://localhost:3003/user/login", values).then((res) => {
 
             if(res.data.status === "Ok") {
@@ -23,6 +31,7 @@ const Login = () => {
                 AuthCtx.setIsLogin(true);
                 navigate("/dashboard")
             }
+            complete()
         
         }).catch((err) => {
 
@@ -36,6 +45,7 @@ const Login = () => {
 
     return (
         <Card title="Login" bordered={false} style={{ width: 500, margin: "auto", marginTop: 100 }}>
+            
             {
                 errors && <div className='bg-red-100 p-5 rounded-sm mb-4'>
                     <h4 className='text-red-400 text-xl font-bold mt-4'>Errors occured</h4>

@@ -39,6 +39,11 @@ const CreatePost = () => {
       navigator("/")
     }).catch(er => {
       console.log(er.response.data);
+      // authentication failed 401 due to bad token  
+      if (err.status === 401) {
+        ctx.logout();
+        navigator("/");
+      }
     })
 
   };

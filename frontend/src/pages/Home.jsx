@@ -2,17 +2,33 @@ import React, { useState, useEffect } from 'react';
 import PostCard from '../components/PostCard';
 import Navbar from '../components/navbar/Navbar';
 import axios from 'axios';
+import { useLoadingBar } from "react-top-loading-bar";
+
 
 
 const Home = () => {
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [posts, setPosts] = useState([]);
 
+  const { start, complete } = useLoadingBar({
+    color: "green",
+    height: 3,
+  })
+
   useEffect(() => {
-    axios.get("http://localhost:3003/post/all").then((res) => {
-      setPosts(res.data.posts)
-      // console.log(res.data)
-    })
+
+    const getAllPosts = () => {
+      start()
+      axios.get(`http://localhost:3003/post/all`).then((res) => {
+        setPosts(res.data.posts)
+
+      }).catch(er => console.log(er.message))
+      complete()
+
+    }
+
+    getAllPosts();
+
   }, []);
   // console.log(posts)
   return (

@@ -25,7 +25,7 @@ const upload = require('./helpers/ImageUpload');
 app.use(express.json());
 
 // serve static files like images/uploads folder
-app.use(express.static('uploads'));
+app.use(express.static('uploads/'));
 
 
 

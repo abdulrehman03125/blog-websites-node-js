@@ -3,9 +3,15 @@ import { useNavigate, Link } from "react-router-dom";
 import { Form, Input, Button, Card, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from 'axios';
+import { useLoadingBar } from "react-top-loading-bar";
 
 export const Signup = () => {
 
+
+  const { start, complete } = useLoadingBar({
+    color: "green",
+    height: 2,
+  })
   const navigate = useNavigate();
   const [fileList, setFileList] = useState(null);
   const [errors, setErrors] = useState(null);
@@ -14,7 +20,7 @@ export const Signup = () => {
   // runs on form submit  
   const onFinish = (values) => {
     setLoading(true)
-    console.log("Signup Success:", values);
+    // console.log("Signup Success:", values);
 
     // sending multipart form data
     let formData = new FormData();
@@ -24,21 +30,25 @@ export const Signup = () => {
     formData.append("image", fileList[0].originFileObj);
 
 
+    start()
     axios.post("http://localhost:3003/user/signup", formData, {
       headers: {
         "Content-Type": "multipart/form-data"
       }
+
+      // )
     }).then((res) => {
 
-      console.log(res.data)
+      // console.log(res.data)
       navigate("/login")
 
+      complete()
     }).catch((err) => {
 
       console.log(err.response.data)
       setErrors(err.response.data.errors);
 
-    }).finally( () =>  setLoading(false))
+    }).finally(() => setLoading(false))
 
     // navigate("/");
   };

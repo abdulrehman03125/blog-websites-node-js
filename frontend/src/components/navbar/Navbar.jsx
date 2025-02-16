@@ -4,6 +4,7 @@ import { CheckAuth } from '../../context/CheckAuth';
 import { useNavigate } from 'react-router-dom';
 const Navbar = () => {
   const AuthCtx = useContext(CheckAuth)
+const ctx = useContext(CheckAuth)
   const navigator = useNavigate();
 
   return (
@@ -26,11 +27,21 @@ const Navbar = () => {
               >
                 Dashboard
               </button>
+
               <button
                 className="bg-red-500 cursor-pointer text-white px-4 py-2 rounded hover:bg-blue-600"
                 onClick={() => navigator("/dashboard/create")}
               >
                 Create Post
+              </button>
+              <button
+                className="bg-yellow-500 cursor-pointer text-white px-4 py-2 rounded hover:bg-blue-600"
+                onClick={() => {
+                  ctx.logout();
+                  navigator("/login");
+                }}
+              >
+                Logout
               </button>
             </>
           ) : (
